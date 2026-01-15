@@ -1,6 +1,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED, PLEASE DO NOT EDIT.
 #
-# Generated on 2025-12-17T12:58:29Z by kres 26be706.
+# Generated on 2026-01-15T19:06:01Z by kres 6f7b97a.
 
 # common variables
 
@@ -37,6 +37,7 @@ PLATFORM ?= linux/amd64,linux/arm64
 PROGRESS ?= auto
 PUSH ?= false
 CI_ARGS ?=
+WITH_BUILD_DEBUG ?=
 BUILD_ARGS = --build-arg=SOURCE_DATE_EPOCH=$(SOURCE_DATE_EPOCH)
 COMMON_ARGS = --file=Pkgfile
 COMMON_ARGS += --provenance=false
@@ -98,6 +99,10 @@ The registry and username can be overridden by exporting REGISTRY, and USERNAME
 respectively.
 
 endef
+
+ifneq (, $(filter $(WITH_BUILD_DEBUG), t true TRUE y yes 1))
+BUILD := BUILDX_EXPERIMENTAL=1 docker buildx debug --invoke /bin/sh --on error build
+endif
 
 all: $(TARGETS)  ## Builds all targets defined.
 
